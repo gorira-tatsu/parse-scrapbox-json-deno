@@ -7,27 +7,25 @@ const matched_data = page_data.map(
 )
 
 const LinkedAllTagPageid = () => {
-    let AllLinked = new Map([
+    let AllLinked = new Map();
 
-    ]);
-
-    page_data.map(
-        (page) => {
-            const CheckTheTag = page.lines.slice(1).join().match(/#(?![^\[]*])[^\s,]+/)?.[0]
-            if (CheckTheTag && !AllLinked.has(CheckTheTag)) {
-                const LinkedTagPageids: string[] = [String(page.id)]
-                AllLinked.set(CheckTheTag, LinkedTagPageids)
-            }
-            else if (CheckTheTag && AllLinked.has(CheckTheTag)) {
-                const LinkedTagPageids: string[] = Array.from(AllLinked.get(CheckTheTag) || [])
-                LinkedTagPageids.push(String(page.id));
-                AllLinked.set(CheckTheTag, LinkedTagPageids)
-            }
+    page_data.forEach((page) => {
+        const CheckTheTag = page.lines.slice(1).join().match(/#(?![^\[]*])[^\s,]+/g);
+        if (CheckTheTag) {
+            CheckTheTag.forEach((tag) => {
+                if (!AllLinked.has(tag)) {
+                    AllLinked.set(tag, [String(page.id)]);
+                } else {
+                    const LinkedTagPageids: string[] = Array.from(AllLinked.get(tag) || []);
+                    LinkedTagPageids.push(String(page.id));
+                    AllLinked.set(tag, LinkedTagPageids);
+                }
+            });
         }
-    )
+    });
 
-    return AllLinked
-}
+    return AllLinked;
+};
 
 
 console.log(LinkedAllTagPageid().get("#見た記事").length!)
