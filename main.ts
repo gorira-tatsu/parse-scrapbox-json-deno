@@ -1,5 +1,11 @@
 import data from "./data/gorira.json" with { type: "json" };
 
+const deleted_tag_list= [
+    "member"
+].map(
+    (word) => "#"+word
+)
+
 const page_data = data.pages
 
 const LinkedAllTagPageid = () => {
@@ -26,7 +32,6 @@ const LinkedAllTagPageid = () => {
 
 const LinkedList = LinkedAllTagPageid()
 const deleted_list:string[] = []
-const deleted_tag_list= ["#member","#見た記事"]
 deleted_tag_list.forEach(
     (tag) => { deleted_list.push(...LinkedList.get(tag)); }
 )
@@ -39,3 +44,10 @@ const deleted_page = data.pages.filter(
 
 console.log(deleted_list.length)
 console.log(deleted_page.length)
+
+const jsonString = JSON.stringify(deleted_page, null, 2); // インデントと見やすさのためにnullと2を指定
+const filePath = "./data/output.json";
+
+await Deno.writeTextFile(filePath, jsonString);
+
+console.log(`JSONデータがファイルに出力されました: ${filePath}`);
