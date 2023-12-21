@@ -45,7 +45,9 @@ const deleted_page = data.pages.filter(
 console.log(deleted_list.length)
 console.log(deleted_page.length)
 
-const jsonString = JSON.stringify(deleted_page, null, 2); // インデントと見やすさのためにnullと2を指定
+const OutputData = {"pages": deleted_page}
+
+const jsonString = JSON.stringify(OutputData, null, 2); // インデントと見やすさのためにnullと2を指定
 const filePath = "./data/output.json";
 
 await Deno.writeTextFile(filePath, jsonString);
